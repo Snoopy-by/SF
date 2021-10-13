@@ -1,0 +1,123 @@
+<aura:component access="global" implements="flexipage:availableForAllPageTypes,lightning:isUrlAddressable,force:hasRecordId,force:appHostable" controller="ExpenseController">
+
+  <aura:attribute name="pageReference" type="Object"/>
+  <lightning:navigation aura:id="navService"/>
+
+  <aura:attribute name="offices" type="String[]" />
+  <aura:attribute name="balances" type="Integer[]" />
+  <aura:attribute name="year" type="Integer" />
+  <aura:attribute name="listYears" type="List" />
+  <aura:attribute name="months" type="List" />
+  <aura:attribute name="expensesList" type="List" />
+  <aura:attribute name="monthlyAvg" type="List" />
+  <aura:attribute name="sum" type="List" />
+  <aura:attribute name="totalAmounts" type="List" />
+  <aura:attribute name="totalSum" type="Integer" />
+
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+  <table class="slds-table_bordered slds-table_col-bordered" style="width: 100%;">
+    <tbody>
+      <tr class="header-line">
+        <td
+          colspan="2"
+          class="slds-text-title_bold slds-text-color_weak cell"
+          width="30%"
+          style="font-size: large;"
+        >
+          Regional Expenses
+          <lightning:buttonMenu
+            alternativeText="Show menu"
+            class="slds-button_last"
+            onselect="{!c.changeYear}"
+            label="{!v.year}"
+            variant="bare"
+          >
+            <aura:iteration items="{!v.listYears}" var="year">
+              <lightning:menuItem label="{!year}" value="{!year}" />
+            </aura:iteration>
+          </lightning:buttonMenu>
+        </td>
+        <aura:iteration items="{!v.offices}" var="office">
+          <td class="values cell">
+            <lightning:button
+              label="{!office}"
+              onclick="{!c.toExpensesPage}"
+              value="{!office}"
+              variant="bare"
+              class="slds-button_last slds-text-title_bold values"
+            />
+          </td>
+        </aura:iteration>
+        <td
+          class="sum slds-text-title_bold"
+          rowspan="3"
+          style="font-size: large;"
+        >
+          <span class="red-txt">Summ: </span>
+        </td>
+      </tr>       
+      <tr class="balance-line">
+        <td
+          rowspan="2"
+          class="slds-text-title_bold month cell"
+          style="font-size: large;"
+        >
+          <span class="blue-txt">Month</span>
+        </td>  
+        <td class="slds-text-title_bold cell" style="font-size: large;">
+          <span class="red-txt">Balance now:</span>
+        </td>
+        <aura:iteration items="{!v.balances}" var="balance">
+          <td
+            class="values slds-text-title_bold cell"
+            style="font-size: large;"
+          >
+              {!balance}
+          </td>
+        </aura:iteration>
+      </tr>
+      <tr class="average-line cell">
+        <td class="slds-text-title_bold cell"><span class="red-txt">Monthly average:</span></td>
+        <aura:iteration items="{!v.monthlyAvg}" var="avg">
+          <td class="values cell">
+              {!avg}             
+            </td>
+        </aura:iteration>
+      </tr>              
+      <tr class="background-exp-values">
+        <td colspan="2">        
+          <aura:iteration items="{!v.months}" var="month">
+            <tr class="cell border-exp">
+              {!month}
+            </tr>
+          </aura:iteration>
+        </td>       
+        <aura:iteration items="{!v.expensesList}" var="exp">
+          <td>
+            <aura:iteration items="{!exp.value}" var="expVal">
+              <tr class="cell border-exp">
+                {!expVal}
+              </tr>
+            </aura:iteration>
+          </td>
+        </aura:iteration>
+         	<td style="background-color: #f9f3aa;">
+
+          <aura:iteration items="{!v.sum}" var="sum">
+            	<td class="cell border-exp">
+                	{!sum}
+            	</td>
+          </aura:iteration>
+        	</td>
+        </tr>
+      <tr class="total-line">
+        <td colspan="2" class="slds-text-title_bold cell">Total:</td>
+        <aura:iteration items="{!v.totalAmounts}" var="amount">
+          <td class="values slds-text-title_bold cell">{!amount}</td>
+        </aura:iteration>
+        <td class="slds-text-title_bold cell">{!v.totalSum}</td>
+      </tr>
+    </tbody>
+  </table>
+</aura:component>

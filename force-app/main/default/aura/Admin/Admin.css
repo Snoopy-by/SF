@@ -1,0 +1,67 @@
+.THIS .header-line{
+background-color: #effafb;  
+}
+.THIS .background-exp-values tr:nth-child(even){
+background-color: #effafb;
+}
+.THIS .background-exp-values tr:nth-child(odd){
+background-color: #fff;
+}
+.THIS .total-line{
+background-color: #d0d0d0;
+}
+
+.THIS .sum{
+background-color: #f9f3aa;
+vertical-align: bottom;
+}
+
+.THIS .average-line{
+background-color: #f9f4e7;
+    
+}
+
+.THIS .month{
+background-color: #d0d0d0;
+vertical-align: bottom;
+}
+
+.THIS .balance-line{
+background-color: #9bbbd8;
+}
+
+.THIS .values{
+text-align: center;
+}
+
+.THIS .cell{
+padding: 1%;
+}
+
+.THIS .border{
+border-bottom: 2px solid rgb(221, 219, 218) !important;
+border-collapse: collapse;
+display: block;
+}
+
+.THIS .border-exp{
+border-bottom: 2px solid rgb(221, 219, 218) !important;
+border-collapse: collapse;
+display: block;
+height: 26.9333px;
+    
+}
+
+
+.THIS .table-bord{
+border: 1px solid 2px solid rgb(221, 219, 218);
+border-collapse: collapse;
+}
+
+.THIS .red-txt{
+    color: red;
+}
+
+.THIS .blue-txt{
+    color: blue;
+}

@@ -1,0 +1,35 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:appHostable,lightning:isUrlAddressable,force:hasRecordId,force:appHostable" controller="ExpenseController" access="global">
+    
+    <aura:attribute name="pageReference" type="Object"/>
+	<lightning:navigation aura:id="navService"/>
+    <aura:attribute name="login" type="String"/>
+    <aura:attribute name="password" type="String"/>
+    <aura:attribute name="message" type="String"/>
+ 
+    <lightning:card  class="slds-card">
+        <div class="slds-align_absolute-center slds-size_medium slds-text-title_bold">Expense Application</div>
+        <div class="slds-card__body slds-align_absolute-center slds-size_medium">
+            <form>
+     			<lightning:input type="email"
+                                 label="Login"
+                                 placeholder="Enter your username"
+                                 class="slds-size_medium"
+                                 value="{!v.login}"/>
+     			<br/>
+                <lightning:input type ="password"
+                                 label="Password"
+                                 placeholder="Password"
+                                 class="slds-size_medium"
+                                 value="{!v.password}"/>
+                <br/>
+                <lightning:button variant="brand"
+                                  label="Login"
+                                  title="Login action"
+                                  onclick="{!c.getInfo}"
+                                  class="slds-size_medium"/>
+            	<br/>
+                <br/>
+            </form>
+   		</div>
+    </lightning:card> 
+</aura:component>

@@ -1,0 +1,25 @@
+.THIS .col1{
+  position: relative;
+}
+
+.THIS .col2{
+  position: absolute;
+  line-height: normal;
+  left: 140px;
+  bottom: 8px;
+}
+
+.THIS .col3{
+  position: absolute;
+  line-height: normal;
+  left: 240px;
+  bottom: 8px;
+}
+
+.THIS .total1{
+  margin-left: 65px;
+}
+
+.THIS .total2{
+  margin-left: 460px;
+}

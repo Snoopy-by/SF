@@ -1,0 +1,99 @@
+<aura:component access="global" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" controller="ExchangeRateController">
+    
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    
+    <aura:attribute name="spinner" type="boolean" default="false"/>  
+    <aura:attribute name="listOfCur" type="List" />
+    <aura:attribute name="defCur" type="String" />
+    <aura:attribute name="curInfoTable" type="Exchange_Rate__c[]" />
+    <aura:attribute name="columnsPL" type="List" />
+    <aura:attribute name="inputDate" type="Date" />
+    <aura:attribute name="startDate" type="Date" />
+    <aura:attribute name="endDate" type="Date" />
+    <aura:attribute name="selTabId" type="String" />
+    <aura:attribute name="maxDate" type="Date" />
+    <aura:attribute name="message" type="String"/>
+    <aura:attribute name="title" type="String" />
+  	<aura:attribute name="severity" type="String" />
+
+    
+    <div class="slds-col">           
+            <lightning:card>                              
+            
+                <center><b class="b-size">Exchange Rate Application</b></center>
+                <center><lightning:select name="select" aura:id="select"
+                                          label="Select currency"
+                                          class="slds-col slds-size_2-of-5"
+                                          value="{!v.defCur}"> 
+                    <aura:iteration items="{!v.listOfCur}" var="cur">
+                        <option value="{!cur}" text="{!cur}"></option>
+                    </aura:iteration>    
+                    </lightning:select>
+                    </center>
+                
+                <lightning:tabset selectedTabId="{!v.selTabId}">
+                    
+                    <lightning:tab label="Date" id="dateId">
+                      <center> <lightning:input type="date"
+                                                 name="input1"
+                                                 label="Select date"
+                                                 value="{!v.inputDate}"
+                                                 class="slds-col slds-size_2-of-5"
+                                                 min="1999-01-04"
+                                                 max="{!v.maxDate}"/>
+                        </center>
+                    </lightning:tab>
+                    
+                    <lightning:tab label="Period" id="periodId">
+                       <center>
+                        <lightning:input type="date"
+                                                 name="input2"
+                                                 label="Select start date"
+                                                 value="{!v.startDate}"
+                                                 class="slds-col slds-size_2-of-5"
+                                                 min="1999-01-04"
+                                                 max="{!v.maxDate}"/>
+                      
+                        <lightning:input type="date"
+                                                 name="input3"
+                                                 label="Select end date"
+                                                 value="{!v.endDate}"
+                                                 class="slds-col slds-size_2-of-5"
+                                                 min="1999-01-04"
+                                                 max="{!v.maxDate}"/>
+                        </center>                
+                    </lightning:tab>
+                </lightning:tabset>              
+                <center><lightning:button variant="brand" label="Search" onclick="{! c.onChange }" /></center>
+                <br/> 
+                <center>
+                <ui:message class="slds-hide slds-size_2-of-5" title="{!v.title}" severity="{!v.severity}" closable="false" aura:id="message">
+                {!v.message}  
+                </ui:message></center>
+                
+                
+                
+                <aura:if isTrue="{!v.spinner}">
+        			<div aura:id="spinnerId" class="slds-spinner_container">
+            			<div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                			<span class="slds-assistive-text">Loading...</span>
+                				<div class="slds-spinner__dot-a"></div>
+                				<div class="slds-spinner__dot-b"></div>
+            			</div>
+        			</div>
+    			</aura:if>  
+                
+                
+                
+                <div class="slds-scrollable" style="height:14rem">
+                    
+                    <div class="slds-box slds-theme_default slds-scrollable_y">
+                        <lightning:datatable data="{! v.curInfoTable }" 
+                                             columns="{! v.columnsPL }" 
+                                             keyField="id"
+                                             hideCheckboxColumn="true"/>
+                    	</div>
+                	</div>
+              	</lightning:card>
+        	</div>            
+</aura:component>

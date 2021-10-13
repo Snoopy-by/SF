@@ -1,0 +1,100 @@
+<apex:page controller="ContactViewController"> 
+    
+    <h1>Contacts</h1>
+    
+    <apex:form id="form">
+        <apex:pageBlock id="ContactTableSection">
+               
+        <apex:inputText value="{!SearchContacts}" />
+		<apex:commandButton action="{!SearchContact}" value="Search" reRender="ContactTableSection" status="SearchStatus"/>
+		<apex:actionStatus id="SearchStatus">
+		<apex:facet name="start"><img src="/img/loading.gif" alt="" /></apex:facet>
+		<apex:facet name="stop"></apex:facet>
+		</apex:actionStatus>
+        
+        <apex:commandbutton action="{!URLFOR($Action.Contact.NewContact)}" value="New Contact"/>
+            
+        <apex:pageBlockSection title="Contact information"  columns="1"  >        
+              <apex:pageBlockTable value="{!Names}" var="item">
+                  
+                 <apex:column >
+                	<apex:outputLink title="" value="/{!item.id}/e?retURL=/apex/{!$CurrentPage.Name}" style="font-weight:bold">Edit</apex:outputLink>&nbsp;|&nbsp;
+                    <a href="javascript:if (window.confirm('Are you sure?')) deleterecord('{!item.Id}')" style="font-weight:bold">Del</a>
+                 </apex:column>
+                  
+                <apex:column headerValue="Name"> 
+                    <a href="/{item.Id}" target="_blank">{!item.Name}</a>
+                    <apex:facet name="header">
+                    <apex:commandLink action="{!sortName}" reRender="ContactTableSection">Name
+       				</apex:commandLink>
+                    </apex:facet>
+                </apex:column> 
+                 
+                <apex:column headerValue="Email" value="{!item.Email}">
+                    <apex:facet name="header">
+        			<apex:commandLink action="{!sortEmail}" reRender="ContactTableSection">Email
+       				</apex:commandLink>
+    				</apex:facet>
+                    </apex:column>
+                    
+                    <apex:column headerValue="Contact Level" value="{!item.Contact_Level__c}">
+                   
+                    <apex:facet name="header">
+        			<apex:commandLink action="{!sortCL}" reRender="ContactTableSection">Contact Level
+       				</apex:commandLink>
+    				</apex:facet>
+                    </apex:column>
+                    
+                  
+                    <apex:column headerValue="Account" value="{!item.AccountId}">
+                    <apex:facet name="header">
+        			<apex:commandLink action="{!sortAN}" reRender="ContactTableSection">Account
+       				</apex:commandLink>
+    				</apex:facet>
+                    </apex:column>
+                    
+                    <apex:column headerValue="Owner" value="{!item.OwnerId}">
+                    <apex:facet name="header">
+        			<apex:commandLink action="{!sortON}" reRender="ContactTableSection">Owner
+       				</apex:commandLink>
+    				</apex:facet>
+                    </apex:column>
+                    
+                    <apex:column headerValue="Created By" value="{!item.CreatedById}">
+                    <apex:facet name="header">
+        			<apex:commandLink action="{!sortCN}" reRender="ContactTableSection">Created By
+       				</apex:commandLink>
+    				</apex:facet>
+                    </apex:column>
+                    
+                    <apex:column headerValue="Created Date" value="{!item.CreatedDate}">
+                     <apex:facet name="header">
+        			<apex:commandLink action="{!sortCD}" reRender="ContactTableSection">Created Date
+       				</apex:commandLink>
+    				</apex:facet>
+                    </apex:column>
+                  
+             </apex:pageBlockTable>
+     
+        <apex:outputPanel layout="block" id="ContactTableBox">   
+             <apex:panelGrid columns="7">
+				<apex:commandButton action="{!setCon.first}" status="PaginationStatus" reRender="ContactTableSection" value="| <" disabled="{!!setCon.hasPrevious}" title="First Page"/>
+				<apex:commandButton action="{!setCon.previous}" status="PaginationStatus" reRender="ContactTableSection" value=" <" disabled="{!!setCon.hasPrevious}" title="Previous Page"/>
+				<apex:commandButton action="{!setCon.next}" status="PaginationStatus" reRender="ContactTableSection" value=" >" disabled="{!!setCon.hasNext}" title="Next Page"/>
+				<apex:commandButton action="{!setCon.last}" status="PaginationStatus" reRender="ContactTableSection" value="> |" disabled="{!!setCon.hasNext}" title="Last Page"/>
+				<apex:outputText >{!(setCon.pageNumber * size)+1-size}-{!IF((setCon.pageNumber * size)>noOfRecords, noOfRecords,(setCon.pageNumber * size))} of {!noOfRecords}</apex:outputText>
+				<apex:actionStatus id="PaginationStatus">
+				<apex:facet name="start"><img src="/img/loading.gif" alt="" /></apex:facet>
+				<apex:facet name="stop"></apex:facet>
+				</apex:actionStatus>
+			</apex:panelGrid>       
+		</apex:outputPanel>     
+       </apex:pageBlockSection>
+            
+		<apex:actionFunction action="{!deleterecord}" name="deleterecord" reRender="form" >
+			<apex:param name="contacts" value="" assignTo="{!SelectedContactId}" />
+		</apex:actionFunction>
+            
+      </apex:pageBlock>
+   </apex:form>
+</apex:page>

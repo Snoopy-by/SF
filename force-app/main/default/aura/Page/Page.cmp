@@ -1,0 +1,141 @@
+<aura:component access="global" implements="flexipage:availableForAllPageTypes,lightning:isUrlAddressable,force:hasRecordId,force:appHostable" controller="ExpenseController"> 
+ 	
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="force:refreshView" action="{! c.doInit}" />
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.reInit}" />
+   
+    <aura:attribute name="pageReference" type="Object"/>
+    <lightning:navigation aura:id="navService"/>
+    <aura:attribute name="Balance" type="Integer" />
+    <aura:attribute name="Office" type="String" />
+    <aura:attribute name="login" type="String" />
+    <aura:attribute name="myAttribute" type="String" />
+    <aura:attribute name="months" type="String"/>
+    <aura:attribute name="totalAmount" type="Integer" />
+    <aura:attribute name="totalIncome" type="Integer" />
+    <aura:attribute name="navInfo" type="List" />
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="curMonthDateList" type="List" />
+    <aura:attribute name="activeSections" type="List" />
+    <aura:attribute name="expensesInfo" type="Expense_Card__c[]" />
+    <aura:attribute name="totalAccordion" type="Integer" />
+    <aura:attribute name="selectedMonth" type="String" />
+    <aura:attribute name="listYears" type="List" />
+    <aura:attribute name="nameYear" type="Integer" />
+    <aura:attribute name="nameMonth" type="Integer" />
+    <aura:attribute name="ifAdmin" type="boolean" default="false"/>
+
+		<div>
+			<div class="slds-grid slds-wrap header slds-theme_shade slds-p-vertical_medium slds-p-horizontal_medium">
+				<div class="slds-col slds-size_3-of-12">
+					<div class="page-section page-header slds-align_absolute-left">
+						<h1 class="slds-text-heading_medium">Expenses {!v.Office}</h1>
+					</div>
+				</div>
+				<div class="slds-col slds-size_6-of-12">
+				
+					<div class="page-section page-header slds-align_absolute-center">
+						<h1 class="slds-text-heading_medium">Balance: {!v.Balance} $</h1>
+					</div>
+					
+				</div>
+				<div class="slds-col slds-size_3-of-12">
+					<div class="slds-float_right">
+						<aura:renderIf isTrue="{!v.ifAdmin}">
+            				<lightning:button class="slds-button_stretch" 
+                                              iconName="utility:back" 
+                                              label=" Back " 
+                                              title="Back" 
+                                              onclick="{! c.clickBackAdminPage }" />
+                            
+               				<aura:set attribute="else"> 
+                   				<lightning:button label="Income" 
+                                                  iconName="utility:arrowdown" 
+                                                  iconPosition="left" 
+                                                  class="header-btn" 
+                                                  onclick="{!c.incomeClick}"/> 
+                                
+          						<lightning:button label="New Expense"
+                                                  class="header-btn"
+                                                  onclick="{!c.newExpenseClick}"/>
+							</aura:set>
+						</aura:renderIf> 
+					</div>
+				</div>
+			</div>
+		</div>
+ 
+        		
+       <div class="slds-grid slds-theme_default">
+            <div class="slds-col slds-size_1-of-4 slds-border_right">
+     				<lightning:verticalNavigation onselect="{!c.onMonthClick}" selectedItem="{!v.months}" class="nav-item">
+                                             
+                 			 
+      						<div class="slds-grid">
+                        		<div class="slds-size_1-of-3 slds-align_absolute-center" >MONTHS</div>
+                        		<div class="slds-size_1-of-3 slds-align_absolute-center ">Amount</div>
+                        		<div class="slds-size_1-of-3 slds-align_absolute-center ">Income</div>
+                        	<br/>
+                        	
+                    		</div>
+                       <lightning:verticalNavigationSection class="slds-text-color_weak">
+                                        <aura:iteration items="{!v.navInfo}" var="item">
+                                            <div class="col1">
+                                            <lightning:verticalNavigationItem
+                                                                  name="{!item.monthName}"
+                                                                  label="{!item.monthName}"
+                                                                  />
+                                <lightning:badge label="{!item.amount}" class="col2"/>
+                                <lightning:badge label="{!item.income}" class="col3"/>
+                                            </div>
+                                            </aura:iteration>
+               </lightning:verticalNavigationSection>
+        </lightning:verticalNavigation>
+
+                <div class="slds-grid slds-theme_shade slds-text-title_bold">
+                        		<div class="slds-size_1-of-3 slds-align_absolute-center" >Total:</div>
+                        		<div class="slds-size_1-of-3 slds-align_absolute-center ">{!v.totalAmount}</div>
+                        		<div class="slds-size_1-of-3 slds-align_absolute-center ">{!v.totalIncome}</div>
+                </div>
+                <br/>
+
+                <p style="padding-left: 10%">Years</p>
+                <center>
+                <lightning:buttonGroup class="nav-item">
+                    <aura:iteration items="{!v.listYears}" var="itemYear">
+                        <lightning:button label="{!itemYear}" onclick="{!c.onYearClick}" aura:id="yearBtnGroup"/>
+                    </aura:iteration>
+                </lightning:buttonGroup>
+                </center>
+  
+        </div>
+        
+  <div class="slds-col slds-size_2-of-3">
+ 	<div class="slds-scrollable">
+                    <div class="slds-scrollable_y">
+                        <lightning:accordion
+                                             onsectiontoggle="{! c.onAccordionClick}"
+                                             aura:id="accordion"
+                                             activeSectionName="{! v.activeSections }"
+                                             >
+                            <aura:iteration items="{!v.curMonthDateList}" var="item2">
+                                <lightning:accordionSection name="{!item2}" label="{!item2}">
+                                    <lightning:datatable
+                                                         class="slds-align_absolute-center"
+                                                         data="{! v.expensesInfo }"
+                                                         columns="{! v.columns }"
+                                                         keyField="Id"
+                                                         hideCheckboxColumn="true"
+                                                         onrowaction="{!c.onRowClick}"
+                                                         draftValues="{! v.draftValues }"
+                                                         onsave="{! c.handleSaveEdition }"
+                                                         />
+                                    <p><b class="total1">Total:</b> <b class="total2">${!v.totalAccordion}</b></p>
+                    </lightning:accordionSection>
+                   </aura:iteration>
+                  </lightning:accordion>
+                 </div>
+                </div>
+     		   </div>
+              </div>	
+</aura:component>

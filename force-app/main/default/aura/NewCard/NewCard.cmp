@@ -1,0 +1,29 @@
+<aura:component access = "global" implements="flexipage:availableForAllPageTypes,lightning:isUrlAddressable,force:hasRecordId,force:appHostable" controller="ExpenseController">
+	<aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <aura:attribute name="pageReference" type="Object"/>
+    <lightning:navigation aura:id="navService"/>
+    
+  	<aura:attribute name="login" type="String"/>
+  	<aura:attribute name="amount" type="Double"/>
+  	<aura:attribute name="defDate" type="Date"/>
+    <aura:attribute name="Office" type="String" />
+  	<aura:attribute name="date" type="String" default="{!v.defDate}"/>
+  	<aura:attribute name="description" type="String" />
+
+		<div class="slds-box slds-box_small slds-theme_default">
+        	<div class="page-section page-header slds-align_absolute-center slds-border_bottom">
+            	<h1 class="slds-text-heading_medium slds-m-bottom_medium">New Expense Card</h1>
+        </div>	
+      	<div class="slds-col slds-size_1-of-3">
+        		<lightning:input value="{!v.amount}" type="number" label="Amount" placeholder="Amount..." min="0.01" step="0.01" required="true"/>     
+        		<lightning:input value="{!v.date}" type="date" label="Date"/>
+      	</div>      
+      			<lightning:textarea required="true" value="{!v.description}" label="Description" placeholder="Type here..."/>
+		<div class="slds-clearfix slds-border_top slds-m-top_medium">
+   			<div class="slds-float_right slds-m-top_medium">
+      			<lightning:button  variant="neutral" label="Cancel" title="Cancel" onclick="{!c.Cancel}"/>     
+      			<lightning:button variant="brand" label="Save" title="Save" onclick="{!c.newExpense}"/>
+    		</div>
+        </div>
+      </div>
+</aura:component>
